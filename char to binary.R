@@ -1,12 +1,7 @@
-
-# create binary flag vars  
-for (f in names(train)) { 
+for (f in names(train)) {
   if (class(train[[f]])=="character") {
-    for(t in unique(c(train[, f], test[, f]))) {
-      train[paste(f,t,sep="")] <- ifelse(train[, f]==t,1,0)
-      test[paste(f,t,sep="")] <- ifelse(test[, f]==t,1,0)
-    }
-    train[, f] <- NULL
-    test[, f] <- NULL
-  }              
-}   
+    levels <- unique(c(train[[f]], test[[f]]))
+    train[[f]] <- as.integer(factor(train[[f]], levels=levels))
+    test[[f]]  <- as.integer(factor(test[[f]],  levels=levels))
+  }
+}

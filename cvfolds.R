@@ -1,8 +1,9 @@
 
+# THIS (1)
 
 library(caret)
-numfolds = 5
-trainindex <- createFolds(as.factor(train[, "QuoteConversion_Flag"]), k = numfolds)
+numfolds = 9
+trainindex <- createFolds(as.factor(train[, "fault_severity"]), k = numfolds)
 for (i in 1:numfolds) {
   assign(paste0("val",i), eval(parse(text=paste0("train[trainindex$Fold", i, ",]"))))
   assign(paste0("train",i), eval(parse(text=paste0("train[-trainindex$Fold", i, ",]"))))
@@ -10,7 +11,8 @@ for (i in 1:numfolds) {
 
 
 
-OR
+
+# OR THIS (2)
 
 library(data.table)
 library(readr)
@@ -23,11 +25,10 @@ s2 <- floor(s/((1+length(idnumsh))/5))
 foldTable <- data.frame(VisitNumber=idnumsh)
 foldTable$fold <- s2+1
 
-###################################
 all <- cbind(foldTable, train)
 
 
-# all <- fread("rawfeaturesmaster.csv", header = TRUE)
+
 setDT(all)
 
 valA <- all[fold==1, -1, with=FALSE]

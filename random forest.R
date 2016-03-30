@@ -18,26 +18,6 @@ mval <- valset[,-c(1,2)]
 dummyval <- dummyVars(~ ., data=mval)
 mval <- predict(dummyval, newdata=mval)
 
-# run XGBoost
-library(xgboost)
-xgbparams <- list(objective="binary:logistic",
-                 eval_metric="auc", 
-                 base_score=0.5,               # see if this global bias helps
-                 eta=.01, 
-                 max_depth=12, 
-                 colsample_bytree=0.8, 
-                 gamma = 0.3, # .3 best
-                 min_child_weight=1, 
-                 subsample=0.7,  
-                 nthread=8)
-
-xgbfirst <- xgb.cv(data=mtrain, label=trainset$sponsored, params=xgbparams, nrounds=1500, nfold=5, verbose=1, early.stop.round=NULL) 
-max_auc <- which.max(xgbfirst[,test.auc.mean])
-xgbmodel <- xgboost(data=mtrain, label=trainset$sponsored, params=xgbparams, nrounds=(max_auc), verbose=1, early.stop.round=NULL)
-predxgb <- predict(xgbmodel, mval)
-# xgbfactors <- xgb.importance(dimnames(mtrain)[[2]], model=xgbmodel)
-# xgb.plot.importance(xgbfactors[1:20,])
-
 
 # run RF
 library(randomForest)

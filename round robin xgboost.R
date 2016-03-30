@@ -22,7 +22,8 @@ xgbtest <- xgb.DMatrix(data.matrix(test[, -c(1:2)]), missing=NA)
 numrounds=1200
 set.seed(122)
 param0 <- list(objective  = "multi:softprob"
-               , eval_metric = "mlogloss"
+               , eval_metric = "
+, "
                , num_class = 38
                , eta = 0.01
                , max_depth = 8 #
