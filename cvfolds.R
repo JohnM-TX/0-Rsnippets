@@ -2,7 +2,7 @@
 # THIS (1)
 
 library(caret)
-numfolds = 9
+numfolds = 8
 trainindex <- createFolds(as.factor(train[, "fault_severity"]), k = numfolds)
 for (i in 1:numfolds) {
   assign(paste0("val",i), eval(parse(text=paste0("train[trainindex$Fold", i, ",]"))))

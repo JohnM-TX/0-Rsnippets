@@ -2,32 +2,45 @@
 library(readr)
 
 # AUC blend by rank
-best <- read_csv("submission8412.csv")
-latest <-  read_csv("subens009.csv")
+best <- read_csv("submissionshah.csv")
+latest <-  read_csv("subens035.csv")
 bestrank <- rank(best$TARGET,ties.method="first")
 latestrank <- rank(latest$TARGET,ties.method="first")
-qcfblend <- (0.55*bestrank + 0.45*latestrank)/nrow(best)
+qcfblend <- (0.9*bestrank + 0.1*latestrank)/nrow(best)
 latest$TARGET <- qcfblend
-write_csv(latest, "subens014.csv")
+write_csv(latest, "subens036.csv")
+
 
 
 # simple blender
-submission1 <- read_csv("subens11.csv")
-submission2 <- read_csv("extra_trees45344.csv")
+submission1 <- read_csv("subnewlast2.csv")
+submission2 <- read_csv("subnewlastfeed.csv")
 submission1[, -1] <-  0.9*submission1[, -1] + 0.1*submission2[, -1]
-write_csv(submission1, "subens12.csv")
+write_csv(submission1, "subnewlast5.csv")
+
+
+
 
 
 # monotonic
-submission1 <- read_csv("subens09.csv")
-submission1[, 2] <- 1.005 * submission1[, 2]
-write_csv(submission1, "subadj002.csv")
+submission1 <- read_csv("subens13adj1.csv")
+submission1[, 2] <- 0.9955 * submission1[, 2]
+write_csv(submission1, "subens13adj2.csv")
 
 
 # mean adjust
 train <- read_csv("train.csv")
 meantrain <- mean(train[, 2])
-submission1 <- read_csv("subens12.csv")
+submission1 <- read_csv("subens23adj2.csv")
 meansub <- mean(submission1[, 2])
 submission1[, 2] <- submission1[, 2] * meansub/meantrain   # this is opposite
-write_csv(submission1, "subens12adj2.csv")
+write_csv(submission1, "subens23adj3.csv")
+
+
+# format fixer
+submissionaccept <- read_csv("submissionext.csv")
+submissionreject <- read_csv("submissionxgb.csv")
+submissionaccept[, 2] <-  submissionreject[, 2]
+write_csv(submissionaccept, "submissionxgbredo.csv")
+
+

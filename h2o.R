@@ -13,3 +13,6 @@ preds <- read_csv("preds.csv")
 submission <- data.frame(id=testids)
 submission$target <- preds$Y
 write_csv(submission, "gbmh2ogaussian.csv")
+
+h2o.shutdown()
+y

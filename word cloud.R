@@ -12,7 +12,7 @@ setup_twitter_oauth("0HRKktageXDNpP74JSFxfopqH", "qANNESJ15RVjemgIaJirL4UdRBitqx
 tweets <- searchTwitter("thrivent", n=1000)
 tweets <- strip_retweets(tweets)
 
-tframe <- do.call("rbind", lapply(tweets, as.data.frame))
+tframe <- do.call("rbind", lapply(tweets, as.data.frame))                # also see rbindlist for data tables
 tframe <- tframe[tframe$screenName != "Thrivent", ]
 tvec <- tframe[tframe$screenName != "kenzgrondahl", "text"] # pulls out a problematic tweet
 
