@@ -1,31 +1,40 @@
 
+
 library(readr)
 
 # AUC blend by rank
-best <- read_csv("submissionshah.csv")
-latest <-  read_csv("subens035.csv")
-bestrank <- rank(best$TARGET,ties.method="first")
-latestrank <- rank(latest$TARGET,ties.method="first")
+best <- read_csv("subens010.csv")
+best <- best[order(best$activity_id),]
+latest <-  read_csv("mod3108Kaggle_01-1.csv")
+latest <- latest[order(latest$activity_id),]
+bestrank <- rank(best[, 2],ties.method="first")
+latestrank <- rank(latest[, 2],ties.method="first")
 qcfblend <- (0.9*bestrank + 0.1*latestrank)/nrow(best)
-latest$TARGET <- qcfblend
-write_csv(latest, "subens036.csv")
+latest[, 2] <- qcfblend
+write_csv(latest, "subens011.csv")
 
 
 
 # simple blender
-submission1 <- read_csv("subnewlast2.csv")
-submission2 <- read_csv("subnewlastfeed.csv")
-submission1[, -1] <-  0.9*submission1[, -1] + 0.1*submission2[, -1]
-write_csv(submission1, "subnewlast5.csv")
+submission1 <- fread("subens009.csv")
+setorder(submission1, id)
+submission2 <- fread("submit2.csv")
+setorder(submission2, id)
+subpart3 <-  0.9*submission1[, -1, with=FALSE] + 0.1*submission2[, -1, with=FALSE]
+submission1[, Demanda_uni_equil := subpart3]
+write_csv(submission1, "subens010.csv")
 
 
+#alt
+submission1[, -11] <-  0.9*submission1[, -11] + 0.1*submission2[, -11]
+write_csv(submission1, "subens002.csv")
 
 
 
 # monotonic
-submission1 <- read_csv("subens13adj1.csv")
+submission1 <- read_csv("subens010.csv")
 submission1[, 2] <- 0.9955 * submission1[, 2]
-write_csv(submission1, "subens13adj2.csv")
+write_csv(submission1, "subens10adj3.csv")
 
 
 # mean adjust

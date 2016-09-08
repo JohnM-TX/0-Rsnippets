@@ -18,6 +18,10 @@ for (f in names(train)) {
   }
 }
 
+# single column data table way
+levels <- unique(dt[, mycolumn])
+dt[, newtype := as.integer(factor(mycolumn, levels))]
+
 
 # change all columns
 dt[, names(dt) := lapply(.SD, as.numeric)]
