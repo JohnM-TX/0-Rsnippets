@@ -1,28 +1,32 @@
 
-
+library(data.table)
 library(readr)
 
 # AUC blend by rank
-best <- read_csv("subens010.csv")
-best <- best[order(best$activity_id),]
-latest <-  read_csv("mod3108Kaggle_01-1.csv")
-latest <- latest[order(latest$activity_id),]
-bestrank <- rank(best[, 2],ties.method="first")
-latestrank <- rank(latest[, 2],ties.method="first")
-qcfblend <- (0.9*bestrank + 0.1*latestrank)/nrow(best)
-latest[, 2] <- qcfblend
-write_csv(latest, "subens011.csv")
+primo <- fread("submission_0.586.csv")
+setorder(primo, File)
+segundo <- fread("submission_0.572.csv")
+setorder(segundo, File)
+tercero <- fread("submission_0.56.csv")
+setorder(tercero, File)
+rango1 <- rank(primo[, 2, with = FALSE],ties.method="first")
+rango2 <- rank(segundo[, 2, with = FALSE],ties.method="first")
+rango3 <- rank(tercero[, 2, with = FALSE],ties.method="first")
+qcfblend <- (0.50*rango1 + 0.25*rango2 + 0.25*rango3)/nrow(primo)
+tercero[, 2 := qcfblend, with = FALSE]
+fwrite(tercero, "ens013.csv")
 
 
 
 # simple blender
-submission1 <- fread("subens009.csv")
-setorder(submission1, id)
-submission2 <- fread("submit2.csv")
-setorder(submission2, id)
-subpart3 <-  0.9*submission1[, -1, with=FALSE] + 0.1*submission2[, -1, with=FALSE]
-submission1[, Demanda_uni_equil := subpart3]
-write_csv(submission1, "subens010.csv")
+submission1 <- fread("sub_1.165.csv")
+setorder(submission1, image)
+submission2 <- fread("sub_1.188.csv")
+setorder(submission2, image)
+subpart3 <-  0.8*submission1[, !"image", with = FALSE] + 0.2*submission2[, !"image", with = FALSE]
+submission3 <- cbind(subpart3, submission1[, image])
+setnames(submission3, "V2", "image")
+fwrite(submission1, "subens004.csv")
 
 
 #alt

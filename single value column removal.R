@@ -1,0 +1,1 @@
+efff <- Filter(function(x) (length(unique(x))>1), efff)

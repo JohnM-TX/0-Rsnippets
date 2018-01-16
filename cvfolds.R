@@ -1,14 +1,14 @@
 
 # THIS (1)
 
+#best
 library(caret)
 numfolds = 8
-trainindex <- createFolds(as.factor(train[, "fault_severity"]), k = numfolds)
+trainindex <- createFolds(train$interest_level, k = numfolds)
 for (i in 1:numfolds) {
-  assign(paste0("val",i), eval(parse(text=paste0("train[trainindex$Fold", i, ",]"))))
-  assign(paste0("train",i), eval(parse(text=paste0("train[-trainindex$Fold", i, ",]"))))
+  assign(paste0("val",i), train[trainindex[[paste0("Fold", i)]], ])
+  assign(paste0("train",i), train[-trainindex[[paste0("Fold", i)]], ])
 }
-
 
 
 

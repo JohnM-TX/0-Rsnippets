@@ -1,15 +1,22 @@
 # script to run home made grid search
 
-for (e in etas) {
-  for (d in depths) {
-    for (mcw in mcws) {
-      
-      cv = xgb.cv(param=cv.param, data = trainMatrix, label = y, maximize = FALSE, 
-                  nfold = cv.nfold, nrounds = cv.nround, verbose = FALSE, early.stop.round = cv.esr, 
-                  eval_metric = "logloss")
+scores <- " "
+for (cst in csts) {
+  for (csl in csls) {
+    for (ssm in ssms) {
+        xgbfirst <- xgb.cv(data=xgbtrain
+                   , params = param0
+                   , nrounds = numrounds 
+                   , print_every_n = 10L
+                   , colsample_bytree = cst
+                   , colsample_bylevel = csl
+                   , subsample = ssm
+                  , verbose = 1
+                   , nfold = nfolds
+                   , early.stop.round = 20
+  ) 
+  score <- min(xgbfirst$test.mlogloss.mean)
+  scores <- paste(scores, cst, csl, ssm, score, ";")
     }
   }
 }
-
-m = min(cv$test.logloss.mean)
-r = which(cv$test.logloss.mean == m)[1]

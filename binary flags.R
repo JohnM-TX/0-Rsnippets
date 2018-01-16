@@ -15,6 +15,15 @@ setorder(events, id)
 head(events, 20)
 
 
+for (f in names(data)) { 
+  if (class(data[[f]]) == "character") {
+    inds <- paste0(f, unique(data[[f]]))
+    data[, (inds) := 0]
+    sapply(inds, function(x) data[f == x, c(x) := 1]) 
+    }              
+}   
+
+
 
 
 
@@ -29,3 +38,6 @@ for (f in names(train)) {
     test[, f] <- NULL
   }              
 }   
+
+
+
